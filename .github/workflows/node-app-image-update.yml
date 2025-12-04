@@ -8,14 +8,19 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
+      with:
+        # Ensure the repository is checked out with write permissions
+        token: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Update Image Version
       id: imgupd
       uses: mikefarah/yq@master
       with:
         cmd: yq eval '.spec.template.spec.containers[0].image = "${{ github.event.client_payload.image }}"' -i node-app/deployment.yaml
-      
-    - uses: stefanzweifel/git-auto-commit-action@v4
+
+    - name: Commit Changes
+      uses: stefanzweifel/git-auto-commit-action@v4
       with:
         commit_message: Apply image name changes
-        repository: https://x-access-token:${{ secrets.GH_PAT }}@github.com/Python6042/k8s-configs.git
+        # Ensure the repository path is correct
+        repository: .
