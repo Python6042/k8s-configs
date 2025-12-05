@@ -7,9 +7,12 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
+    - name: Debug Token
+      run:  echo "Token length: ${#secrets.GH_PAT}"
+
+    - uses: actions/checkout@v3
       with:
-        token: ${{ secrets.GH-PAT }}
+        token: ${{ secrets.GH_PAT }}
 
     - name: Update Image Version
       id: imgupd
